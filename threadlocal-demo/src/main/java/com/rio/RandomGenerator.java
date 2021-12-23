@@ -7,7 +7,7 @@ public class RandomGenerator {
 
   public List<Long> generateNRandomNumbers(int n) {
     List<Long> randomNumbers = new ArrayList<>(n);
-    Context context = ThreadLocalContextStorage.getContext();
+    Context context = SharedMapContextStorage.getContext();
 
     for (int i = 0; i < n; i++) {
       long rand = context.getMinNumber() + (long) (Math.random() * ((context.getMaxNumber() - context.getMinNumber()) + 1));

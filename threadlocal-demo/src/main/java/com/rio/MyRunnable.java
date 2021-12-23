@@ -18,7 +18,7 @@ public class MyRunnable implements Runnable {
     long min = max - 1000;
     Context context = new Context(Thread.currentThread().getName(), max, min);
 
-    ThreadLocalContextStorage.setContext(context);
+    SharedMapContextStorage.setContext(context);
 
     List<Long> randoms = randomGenerator.generateNRandomNumbers(10);
 
