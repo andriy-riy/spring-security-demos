@@ -1,0 +1,14 @@
+### Ping request
+GET http://localhost:8080/ping
+
+### Login
+POST http://localhost:8080/login
+Content-Type: application/x-www-form-urlencoded
+
+username=mongodb1@test.com&password=1234
+
+### Ping Login with Barear token
+GET http://localhost:8080/ping
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VySWQiOiI2MWNiODNjYTYwOGExZjU5YmRiYzBjOWMiLCJlbWFpbCI6Im1vbmdvZGIxQHRlc3QuY29tIiwicm9sZSI6IkZVTExfQUNDRVNTIn0.KaQfLWiwmPhAHC_TCaDTIHrKZGqcaBoPx6xF7z8FllHVcppHGrM4hOXKlihLoLT_92njxkBVucOYUPZbu4XryQ
+
+
