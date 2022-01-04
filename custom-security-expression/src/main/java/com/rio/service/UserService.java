@@ -12,22 +12,22 @@ public class UserService {
   private final List<User> users = List.of(
       User.builder()
           .id("1")
-          .email("admin@email.com")
-          .password("admin@admin")
+          .email("user1@email.com")
+          .password("user1@user1")
           .organizationIds(List.of("1"))
           .build(),
 
       User.builder()
           .id("2")
-          .email("employee@employee.com")
-          .password("employee@employee")
+          .email("user2@email.com")
+          .password("user2@user2")
           .organizationIds(List.of("1"))
           .build(),
 
       User.builder()
           .id("3")
-          .email("guest@guest.com")
-          .password("guest@guest")
+          .email("user3@email.com")
+          .password("user3@user3")
           .organizationIds(List.of("2"))
           .build()
   );

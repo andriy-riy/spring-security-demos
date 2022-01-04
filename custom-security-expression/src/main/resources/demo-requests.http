@@ -1,0 +1,9 @@
+### Ping admin request
+GET http://localhost:8080/api/v1/organizations/{id}/events
+Authorization: Bearer
+
+### Login
+POST http://localhost:8080/login
+Content-Type: application/x-www-form-urlencoded
+
+username=&password=

@@ -4,9 +4,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.expression.WebSecurityExpressionRoot;
 
-public class CustomMethodSecurityExpressionRoot extends WebSecurityExpressionRoot {
+public class CustomWebSecurityExpressionRoot extends WebSecurityExpressionRoot {
 
-  public CustomMethodSecurityExpressionRoot(Authentication authentication, FilterInvocation fi) {
+  public CustomWebSecurityExpressionRoot(Authentication authentication, FilterInvocation fi) {
     super(authentication, fi);
   }
 
