@@ -3,6 +3,7 @@ package com.rio.security;
 import com.rio.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -40,8 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
               .antMatchers("/ping").authenticated();
 
-    http.addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
-    http.addFilterBefore(jwtTokenValidationFilter(), JwtAuthenticationFilter.class);
+    http.addFilterAt(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
+    http.addFilterAfter(jwtTokenValidationFilter(), JwtAuthenticationFilter.class);
   }
 
   @Override
@@ -51,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private JwtAuthenticationFilter jwtRequestFilter() throws Exception {
     JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(
-        new RegexRequestMatcher("/login", "POST"),
+        new RegexRequestMatcher("/login", HttpMethod.POST.name()),
         new JwtAuthenticationSuccessHandler(),
         new AuthenticationEntryPointFailureHandler(new HttpStatusEntryPoint(HttpStatus.BAD_REQUEST))
     );
