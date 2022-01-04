@@ -1,0 +1,17 @@
+### Ping admin request
+GET http://localhost:8080/ping-admin
+Authorization: Bearer
+
+### Ping employee request
+GET http://localhost:8080/ping-employee
+Authorization: Bearer
+
+### Ping admin request
+GET http://localhost:8080/ping-guest
+Authorization: Bearer
+
+### Login
+POST http://localhost:8080/login
+Content-Type: application/x-www-form-urlencoded
+
+username=&password=

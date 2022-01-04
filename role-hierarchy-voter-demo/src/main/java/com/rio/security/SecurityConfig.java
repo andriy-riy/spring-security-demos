@@ -43,13 +43,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         .authorizeRequests()
                 .expressionHandler(webExpressionHandler())
-//              .antMatchers("/ping-admin").hasRole("ADMIN")
-//              .antMatchers("/ping-employee").hasAnyRole("ADMIN", "EMPLOYEE")
-//              .antMatchers("/ping-guest").hasAnyRole("ADMIN", "EMPLOYEE", "GUEST");
-
-                  .antMatchers("/ping-admin").hasRole("ADMIN")
-                  .antMatchers("/ping-employee").hasRole("EMPLOYEE")
-                  .antMatchers("/ping-guest").hasRole("GUEST");
+              .antMatchers("/ping-admin").hasRole("ADMIN")
+              .antMatchers("/ping-employee").hasAnyRole("ADMIN", "EMPLOYEE")
+              .antMatchers("/ping-guest").hasAnyRole("ADMIN", "EMPLOYEE", "GUEST");
 
     http.addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
     http.addFilterBefore(jwtTokenValidationFilter(), JwtAuthenticationFilter.class);

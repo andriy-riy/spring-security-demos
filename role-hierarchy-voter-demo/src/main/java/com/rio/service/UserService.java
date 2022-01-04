@@ -13,7 +13,7 @@ public class UserService {
   private final List<User> users = List.of(
       User.builder()
       .role(Role.ADMIN)
-      .email("admin@email.com")
+      .email("admin@admin.com")
       .password("admin@admin")
       .build(),
 
