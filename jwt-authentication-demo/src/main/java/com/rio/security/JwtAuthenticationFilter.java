@@ -22,10 +22,9 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
     String email = request.getParameter("username");
     String password = request.getParameter("password");
 
-    var authRequest = new JwtAuthenticationToken(email, password);
+    var authentication = new JwtAuthenticationToken(email, password);
+    authentication.setDetails(authenticationDetailsSource.buildDetails(request));
 
-    authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
-
-    return getAuthenticationManager().authenticate(authRequest);
+    return getAuthenticationManager().authenticate(authentication);
   }
 }

@@ -12,10 +12,10 @@ public class UserService {
 
   private final List<User> users = List.of(
       User.builder()
-      .role(Role.ADMIN)
-      .email("admin@admin.com")
-      .password("admin@admin")
-      .build(),
+          .role(Role.ADMIN)
+          .email("admin@admin.com")
+          .password("admin@admin")
+          .build(),
 
       User.builder()
           .role(Role.EMPLOYEE)

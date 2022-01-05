@@ -62,11 +62,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     return jwtAuthenticationFilter;
   }
 
-  private JwtAuthenticationProvider authenticationProvider() {
-    return new JwtAuthenticationProvider(userService, secret);
+  private MongoDBAuthenticationProvider authenticationProvider() {
+    return new MongoDBAuthenticationProvider(userService, secret);
   }
 
-  private JwtTokenValidationFilter jwtTokenValidationFilter() {
-    return new JwtTokenValidationFilter(secret);
+  private JwtBearerTokenFilter jwtTokenValidationFilter() {
+    return new JwtBearerTokenFilter(secret);
   }
 }
