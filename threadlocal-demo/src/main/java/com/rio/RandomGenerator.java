@@ -10,7 +10,7 @@ public class RandomGenerator {
     Context context = SharedMapContextStorage.getContext();
 
     for (int i = 0; i < n; i++) {
-      long rand = context.getMinNumber() + (long) (Math.random() * ((context.getMaxNumber() - context.getMinNumber()) + 1));
+      long rand = context.minNumber() + (long) (Math.random() * ((context.maxNumber() - context.minNumber()) + 1));
       randomNumbers.add(rand);
     }
 

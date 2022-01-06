@@ -22,6 +22,6 @@ public class MyRunnable implements Runnable {
 
     List<Long> randoms = randomGenerator.generateNRandomNumbers(10);
 
-    randoms.forEach(random -> System.out.println(context.getThreadName() + " generated number: " + random));
+    randoms.forEach(random -> System.out.println(context.threadName() + " generated number: " + random));
   }
 }

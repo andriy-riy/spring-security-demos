@@ -1,17 +1,8 @@
 package com.rio.entity;
 
-import lombok.Builder;
-import lombok.Data;
+public record User(String email, String password, Role role) {
 
-@Data
-@Builder
-public class User {
-
-  private String email;
-  private String password;
-  private Role role;
-
-  public enum Role {
-    ADMIN, EMPLOYEE, GUEST
-  }
+    public enum Role {
+        ADMIN, EMPLOYEE, GUEST
+    }
 }

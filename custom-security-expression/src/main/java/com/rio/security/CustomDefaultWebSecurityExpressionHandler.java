@@ -7,8 +7,8 @@ import org.springframework.security.web.access.expression.DefaultWebSecurityExpr
 
 public class CustomDefaultWebSecurityExpressionHandler extends DefaultWebSecurityExpressionHandler {
 
-  @Override
-  protected SecurityExpressionOperations createSecurityExpressionRoot(Authentication authentication, FilterInvocation fi) {
-    return new CustomWebSecurityExpressionRoot(authentication, fi);
-  }
+    @Override
+    protected SecurityExpressionOperations createSecurityExpressionRoot(Authentication authentication, FilterInvocation fi) {
+        return new CustomWebSecurityExpressionRoot(authentication, fi);
+    }
 }

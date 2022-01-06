@@ -16,30 +16,30 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-  private final AuthenticationProvider inMemoryUsersAuthenticationProvider;
-  private final AuthenticationProvider mongoDBAuthenticationProvider;
-  private final AuthenticationProvider randomAuthenticationProvider;
+    private final AuthenticationProvider inMemoryUsersAuthenticationProvider;
+    private final AuthenticationProvider mongoDBAuthenticationProvider;
+    private final AuthenticationProvider randomAuthenticationProvider;
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    http
-        .csrf()
-        .disable()
-        .formLogin()
-              .successHandler((request, response, authentication) -> response.setStatus(HttpStatus.OK.value()))
-              .failureHandler(new AuthenticationEntryPointFailureHandler(new HttpStatusEntryPoint(HttpStatus.BAD_REQUEST)))
-        .and()
-        .exceptionHandling()
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-        .and()
-        .authorizeRequests()
-              .antMatchers("/ping").authenticated();
-  }
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf()
+                .disable()
+                .formLogin()
+                    .successHandler((request, response, authentication) -> response.setStatus(HttpStatus.OK.value()))
+                    .failureHandler(new AuthenticationEntryPointFailureHandler(new HttpStatusEntryPoint(HttpStatus.BAD_REQUEST)))
+                .and()
+                .exceptionHandling()
+                    .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                .and()
+                .authorizeRequests()
+                    .antMatchers("/ping").authenticated();
+    }
 
-  @Override
-  protected void configure(AuthenticationManagerBuilder auth) {
-    auth.authenticationProvider(inMemoryUsersAuthenticationProvider);
-    auth.authenticationProvider(mongoDBAuthenticationProvider);
-    auth.authenticationProvider(randomAuthenticationProvider);
-  }
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(inMemoryUsersAuthenticationProvider);
+        auth.authenticationProvider(mongoDBAuthenticationProvider);
+        auth.authenticationProvider(randomAuthenticationProvider);
+    }
 }

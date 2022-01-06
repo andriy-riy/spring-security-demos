@@ -29,8 +29,8 @@ public class MongoDBAuthenticationProvider implements AuthenticationProvider {
 
         return userService.getByEmail(email)
                 .flatMap(user -> {
-                    if (password.equals(user.getPassword())) {
-                        var userPrinciple = new UserPrinciple(user.getId(), user.getEmail(), user.getOrganizationIds());
+                    if (password.equals(user.password())) {
+                        var userPrinciple = new UserPrinciple(user.id(), user.email(), user.organizationIds());
                         return Optional
                                 .of(new UsernamePasswordAuthenticationToken(userPrinciple, password, Collections.emptyList()));
                     }

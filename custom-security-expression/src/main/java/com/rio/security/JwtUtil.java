@@ -32,9 +32,9 @@ public class JwtUtil {
 
     public static String generateToken(UserPrinciple userPrinciple, String secret, Duration tokenExpiration) {
         return Jwts.builder()
-                .claim("id", userPrinciple.getId())
-                .claim("email", userPrinciple.getEmail())
-                .claim("organizationIds", userPrinciple.getOrganizationIds())
+                .claim("id", userPrinciple.id())
+                .claim("email", userPrinciple.email())
+                .claim("organizationIds", userPrinciple.organizationIds())
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .setExpiration(Date.from(LocalDateTime.now().plus(tokenExpiration).toInstant(ZoneOffset.UTC)))
                 .compact();

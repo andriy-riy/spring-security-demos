@@ -6,19 +6,17 @@ import org.springframework.security.web.access.expression.WebSecurityExpressionR
 
 public class CustomWebSecurityExpressionRoot extends WebSecurityExpressionRoot {
 
-  public CustomWebSecurityExpressionRoot(Authentication authentication, FilterInvocation fi) {
-    super(authentication, fi);
-  }
-
-  public boolean isMember(String organizationId) {
-    if (this.authentication.isAuthenticated()) {
-      if (this.getPrincipal() instanceof UserPrinciple) {
-        UserPrinciple userPrinciple = (UserPrinciple) this.getPrincipal();
-
-        return userPrinciple.getOrganizationIds() != null && userPrinciple.getOrganizationIds().contains(organizationId);
-      }
+    public CustomWebSecurityExpressionRoot(Authentication authentication, FilterInvocation fi) {
+        super(authentication, fi);
     }
 
-    return false;
-  }
+    public boolean isMember(String organizationId) {
+        if (this.authentication.isAuthenticated()) {
+            if (this.getPrincipal() instanceof UserPrinciple userPrinciple) {
+                return userPrinciple.organizationIds() != null && userPrinciple.organizationIds().contains(organizationId);
+            }
+        }
+
+        return false;
+    }
 }

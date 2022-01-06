@@ -21,27 +21,27 @@ import static org.springframework.util.StringUtils.hasText;
 @RequiredArgsConstructor
 public class JwtBearerTokenFilter extends GenericFilterBean {
 
-  private final String secret;
+    private final String secret;
 
-  @Override
-  public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-    logger.info("Validating jwt token...");
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        logger.info("Validating jwt token...");
 
-    obtainBearerToken((HttpServletRequest) servletRequest)
-            .flatMap(token -> JwtUtil.parseToken(token, secret))
-            .ifPresent(userPrinciple -> SecurityContextHolder.getContext()
-                    .setAuthentication(new UsernamePasswordAuthenticationToken(userPrinciple, "", Collections.singletonList(new SimpleGrantedAuthority(userPrinciple.getRole().name())))));
+        obtainBearerToken((HttpServletRequest) servletRequest)
+                .flatMap(token -> JwtUtil.parseToken(token, secret))
+                .ifPresent(userPrinciple -> SecurityContextHolder.getContext()
+                        .setAuthentication(new UsernamePasswordAuthenticationToken(userPrinciple, "", Collections.singletonList(new SimpleGrantedAuthority(userPrinciple.role().name())))));
 
-    filterChain.doFilter(servletRequest, servletResponse);
-  }
-
-  private Optional<String> obtainBearerToken(HttpServletRequest request) {
-    String bearer = request.getHeader(AUTHORIZATION);
-
-    if (hasText(bearer) && bearer.startsWith("Bearer ")) {
-      return Optional.of(bearer.substring(7));
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
-    return Optional.empty();
-  }
+    private Optional<String> obtainBearerToken(HttpServletRequest request) {
+        String bearer = request.getHeader(AUTHORIZATION);
+
+        if (hasText(bearer) && bearer.startsWith("Bearer ")) {
+            return Optional.of(bearer.substring(7));
+        }
+
+        return Optional.empty();
+    }
 }

@@ -1,6 +1,7 @@
 package com.rio.security.providers;
 
 import java.util.Collections;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,23 +14,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class RandomAuthenticationProvider implements AuthenticationProvider {
 
-  @Override
-  public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-    log.debug("Checking credentials using RandomAuthenticationProvider");
+    @Override
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        log.debug("Checking credentials using RandomAuthenticationProvider");
 
-    if (randomBoolean()) {
-      return new UsernamePasswordAuthenticationToken("authenticated user", "without password", Collections.emptyList());
+        if (randomBoolean()) {
+            return new UsernamePasswordAuthenticationToken("authenticated user", "without password", Collections.emptyList());
+        }
+
+        throw new BadCredentialsException("Credentials are invalid");
     }
 
-    throw new BadCredentialsException("Credentials are invalid");
-  }
+    public boolean randomBoolean() {
+        return Math.random() < 0.5;
+    }
 
-  public boolean randomBoolean(){
-    return Math.random() < 0.5;
-  }
-
-  @Override
-  public boolean supports(Class<?> authentication) {
-    return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
-  }
+    @Override
+    public boolean supports(Class<?> authentication) {
+        return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
+    }
 }

@@ -30,10 +30,10 @@ public class MongoDBAuthenticationProvider implements AuthenticationProvider {
 
         return userService.getByEmail(email)
                 .flatMap(user -> {
-                    if (password.equals(user.getPassword())) {
-                        var userPrinciple = new UserPrinciple(user.getEmail(), user.getRole());
+                    if (password.equals(user.password())) {
+                        var userPrinciple = new UserPrinciple(user.email(), user.role());
                         return Optional
-                                .of(new UsernamePasswordAuthenticationToken(userPrinciple, password, Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name()))));
+                                .of(new UsernamePasswordAuthenticationToken(userPrinciple, password, Collections.singletonList(new SimpleGrantedAuthority(user.role().name()))));
                     }
                     return Optional.empty();
                 })
