@@ -3,8 +3,8 @@ package com.rio.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rio.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,7 +14,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.AuthenticationEntryPointFailureHandler;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 
 import java.time.Duration;
 
@@ -53,32 +52,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .expressionHandler(new CustomDefaultWebSecurityExpressionHandler())
                     .antMatchers("/api/v1/organizations/{id}/**").access("isMember(#id)");
 
-        http.addFilterAt(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterAfter(jwtTokenValidationFilter(), JwtAuthenticationFilter.class);
+        http.addFilterAfter(jwtTokenValidationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(authenticationProvider());
+        auth.authenticationProvider(new MongoDBAuthenticationProvider(userService));
     }
 
-    private JwtAuthenticationFilter jwtRequestFilter() throws Exception {
-        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(
-                new RegexRequestMatcher("/login", HttpMethod.POST.name()),
-                new JwtAuthenticationSuccessHandler(objectMapper, secret, tokenExpiration),
-                new AuthenticationEntryPointFailureHandler(new HttpStatusEntryPoint(HttpStatus.BAD_REQUEST))
-        );
+    @Bean
+    public UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter() throws Exception {
+        var usernamePasswordAuthenticationFilter = new UsernamePasswordAuthenticationFilter();
+        usernamePasswordAuthenticationFilter.setAuthenticationManager(this.authenticationManager());
+        usernamePasswordAuthenticationFilter.setAuthenticationSuccessHandler(new JwtAuthenticationSuccessHandler(objectMapper, secret, tokenExpiration));
+        usernamePasswordAuthenticationFilter.setAuthenticationFailureHandler(new AuthenticationEntryPointFailureHandler(new HttpStatusEntryPoint(HttpStatus.BAD_REQUEST)));
 
-        jwtAuthenticationFilter.setAuthenticationManager(this.authenticationManager());
-
-        return jwtAuthenticationFilter;
+        return usernamePasswordAuthenticationFilter;
     }
 
-    private MongoDBAuthenticationProvider authenticationProvider() {
-        return new MongoDBAuthenticationProvider(userService);
-    }
-
-    private JwtBearerTokenFilter jwtTokenValidationFilter() {
+    @Bean
+    public JwtBearerTokenFilter jwtTokenValidationFilter() {
         return new JwtBearerTokenFilter(secret);
     }
 }

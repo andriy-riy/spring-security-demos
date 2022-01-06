@@ -3,8 +3,8 @@ package com.rio.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rio.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.expression.SecurityExpressionHandler;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
@@ -18,7 +18,6 @@ import org.springframework.security.web.access.expression.DefaultWebSecurityExpr
 import org.springframework.security.web.authentication.AuthenticationEntryPointFailureHandler;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 
 import java.time.Duration;
 
@@ -59,8 +58,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/ping-employee").hasAnyRole("ADMIN", "EMPLOYEE")
                     .antMatchers("/ping-guest").hasAnyRole("ADMIN", "EMPLOYEE", "GUEST");
 
-        http.addFilterAt(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterAfter(jwtTokenValidationFilter(), JwtAuthenticationFilter.class);
+        http.addFilterAfter(jwtTokenValidationFilter(), UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(new MongoDBAuthenticationProvider(userService));
+    }
+
+    @Bean
+    public UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter() throws Exception {
+        var usernamePasswordAuthenticationFilter = new UsernamePasswordAuthenticationFilter();
+        usernamePasswordAuthenticationFilter.setAuthenticationManager(this.authenticationManager());
+        usernamePasswordAuthenticationFilter.setAuthenticationSuccessHandler(new JwtAuthenticationSuccessHandler(objectMapper, secret, tokenExpiration));
+        usernamePasswordAuthenticationFilter.setAuthenticationFailureHandler(new AuthenticationEntryPointFailureHandler(new HttpStatusEntryPoint(HttpStatus.BAD_REQUEST)));
+
+        return usernamePasswordAuthenticationFilter;
+    }
+
+    @Bean
+    public JwtBearerTokenFilter jwtTokenValidationFilter() {
+        return new JwtBearerTokenFilter(secret);
     }
 
     private SecurityExpressionHandler<FilterInvocation> webExpressionHandler() {
@@ -75,30 +93,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_EMPLOYEE > ROLE_GUEST");
 
         return roleHierarchy;
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(authenticationProvider());
-    }
-
-    private JwtAuthenticationFilter jwtRequestFilter() throws Exception {
-        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(
-                new RegexRequestMatcher("/login", HttpMethod.POST.name()),
-                new JwtAuthenticationSuccessHandler(objectMapper, secret, tokenExpiration),
-                new AuthenticationEntryPointFailureHandler(new HttpStatusEntryPoint(HttpStatus.BAD_REQUEST))
-        );
-
-        jwtAuthenticationFilter.setAuthenticationManager(this.authenticationManager());
-
-        return jwtAuthenticationFilter;
-    }
-
-    private MongoDBAuthenticationProvider authenticationProvider() {
-        return new MongoDBAuthenticationProvider(userService);
-    }
-
-    private JwtBearerTokenFilter jwtTokenValidationFilter() {
-        return new JwtBearerTokenFilter(secret);
     }
 }
