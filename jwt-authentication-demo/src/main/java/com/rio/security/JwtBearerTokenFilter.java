@@ -3,7 +3,6 @@ package com.rio.security;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.util.StringUtils.hasText;
 
-import com.rio.entity.User;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Optional;
@@ -13,6 +12,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
@@ -27,12 +27,9 @@ public class JwtBearerTokenFilter extends GenericFilterBean {
     logger.info("Validating jwt token...");
 
     obtainBearerToken((HttpServletRequest) servletRequest)
-        .ifPresent(token -> JwtUtil.parseToken(token, secret)
-            .ifPresent(user -> {
-              var jwtAuthenticationToken = new JwtAuthenticationToken(user.getEmail(), "", Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name())), token);
-              SecurityContextHolder.getContext().setAuthentication(jwtAuthenticationToken);
-            })
-        );
+            .flatMap(token -> JwtUtil.parseToken(token, secret))
+            .ifPresent(userPrinciple -> SecurityContextHolder.getContext()
+                    .setAuthentication(new UsernamePasswordAuthenticationToken(userPrinciple, "", Collections.singletonList(new SimpleGrantedAuthority(userPrinciple.getRole().name())))));
 
     filterChain.doFilter(servletRequest, servletResponse);
   }
