@@ -5,37 +5,37 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Date;
+import java.util.Optional;
 
 @Slf4j
 public class JwtUtil {
 
-  public static Optional<User> parseToken(String token, String secret) {
-    try {
-      Claims body = Jwts.parser()
-          .setSigningKey(secret)
-          .parseClaimsJws(token)
-          .getBody();
+    public static Optional<UserPrinciple> parseToken(String token, String secret) {
+        try {
+            Claims body = Jwts.parser()
+                    .setSigningKey(secret)
+                    .parseClaimsJws(token)
+                    .getBody();
 
-      User user = User.builder()
-          .email(body.get("email").toString())
-          .role(User.Role.valueOf(body.get("role").toString()))
-          .build();
-
-      return Optional.of(user);
-
-    } catch (JwtException | ClassCastException e) {
-      log.error("Issue happened during parsing token", e);
-      return Optional.empty();
+            return Optional.of(new UserPrinciple(body.getSubject(), User.Role.valueOf(body.get("role").toString())));
+        } catch (JwtException | ClassCastException e) {
+            log.error("Issue happened during parsing token", e);
+            return Optional.empty();
+        }
     }
-  }
 
-  public static String generateToken(User user, String secret) {
-    return Jwts.builder()
-        .claim("email", user.getEmail())
-        .claim("role", user.getRole())
-        .signWith(SignatureAlgorithm.HS512, secret)
-        .compact();
-  }
+    public static String generateToken(UserPrinciple userPrinciple, String secret, Duration tokenExpiration) {
+        return Jwts.builder()
+                .claim("email", userPrinciple.getEmail())
+                .claim("role", userPrinciple.getRole())
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .setExpiration(Date.from(LocalDateTime.now().plus(tokenExpiration).toInstant(ZoneOffset.UTC)))
+                .compact();
+    }
 }

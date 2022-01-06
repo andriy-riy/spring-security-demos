@@ -11,8 +11,14 @@ public class CustomWebSecurityExpressionRoot extends WebSecurityExpressionRoot {
   }
 
   public boolean isMember(String organizationId) {
-    UserPrinciple userPrinciple = (UserPrinciple) this.getPrincipal();
+    if (this.authentication.isAuthenticated()) {
+      if (this.getPrincipal() instanceof UserPrinciple) {
+        UserPrinciple userPrinciple = (UserPrinciple) this.getPrincipal();
 
-    return userPrinciple.getOrganizationIds() != null && userPrinciple.getOrganizationIds().contains(organizationId);
+        return userPrinciple.getOrganizationIds() != null && userPrinciple.getOrganizationIds().contains(organizationId);
+      }
+    }
+
+    return false;
   }
 }

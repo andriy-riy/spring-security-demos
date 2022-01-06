@@ -1,22 +1,24 @@
 package com.rio.security;
 
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.util.StringUtils.hasText;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.filter.GenericFilterBean;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Optional;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.filter.GenericFilterBean;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Optional;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.util.StringUtils.hasText;
 
 @RequiredArgsConstructor
-public class JwtTokenValidationFilter extends GenericFilterBean {
+public class JwtBearerTokenFilter extends GenericFilterBean {
 
   private final String secret;
 
@@ -25,12 +27,9 @@ public class JwtTokenValidationFilter extends GenericFilterBean {
     logger.info("Validating jwt token...");
 
     obtainBearerToken((HttpServletRequest) servletRequest)
-        .ifPresent(token -> JwtUtil.parseToken(token, secret)
-            .ifPresent(userPrinciple -> {
-              var jwtAuthenticationToken = new JwtAuthenticationToken(userPrinciple, "", Collections.emptyList(), token);
-              SecurityContextHolder.getContext().setAuthentication(jwtAuthenticationToken);
-            })
-        );
+            .flatMap(token -> JwtUtil.parseToken(token, secret))
+            .ifPresent(userPrinciple -> SecurityContextHolder.getContext()
+                    .setAuthentication(new UsernamePasswordAuthenticationToken(userPrinciple, "", Collections.emptyList())));
 
     filterChain.doFilter(servletRequest, servletResponse);
   }
