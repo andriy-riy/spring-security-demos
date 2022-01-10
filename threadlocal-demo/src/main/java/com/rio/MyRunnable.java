@@ -1,6 +1,5 @@
 package com.rio;
 
-
 import java.util.List;
 
 public class MyRunnable implements Runnable {

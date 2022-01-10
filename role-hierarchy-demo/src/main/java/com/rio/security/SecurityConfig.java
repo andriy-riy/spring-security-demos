@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.expression.SecurityExpressionHandler;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -23,6 +24,10 @@ import java.time.Duration;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(
+        prePostEnabled = true,
+        securedEnabled = true,
+        jsr250Enabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
@@ -50,13 +55,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .exceptionHandling()
-                    .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-                .and()
-                .authorizeRequests()
-                    .expressionHandler(webExpressionHandler())
-                    .antMatchers("/ping-admin").hasRole("ADMIN")
-                    .antMatchers("/ping-employee").hasAnyRole("ADMIN", "EMPLOYEE")
-                    .antMatchers("/ping-guest").hasAnyRole("ADMIN", "EMPLOYEE", "GUEST");
+                    .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+//                .and()
+//                .authorizeRequests()
+//                    .expressionHandler(webExpressionHandler())
+//                    .antMatchers("/ping-admin").hasRole("ADMIN")
+//                    .antMatchers("/ping-employee").hasAnyRole("ADMIN", "EMPLOYEE")
+//                    .antMatchers("/ping-guest").hasAnyRole("ADMIN", "EMPLOYEE", "GUEST");
 
         http.addFilterAfter(jwtTokenValidationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

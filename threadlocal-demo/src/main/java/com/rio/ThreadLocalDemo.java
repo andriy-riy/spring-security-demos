@@ -1,6 +1,6 @@
 package com.rio;
 
-public class Main {
+public class ThreadLocalDemo {
 
   public static void main(String[] args) throws InterruptedException {
     Runnable myRunnable = new MyRunnable(new RandomGenerator());
