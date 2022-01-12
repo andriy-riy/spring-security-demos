@@ -1,6 +1,5 @@
 package com.rio.controller;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +16,6 @@ public class PingController {
         return new ResponseDto("Hello Employee!");
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE', 'GUEST')")
     @GetMapping("/ping-guest")
     public ResponseDto pingGuest() {
         return new ResponseDto("Hello Guest!");
