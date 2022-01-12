@@ -51,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers("/ping").authenticated();
 
-        http.addFilterAfter(jwtTokenValidationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtTokenValidationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

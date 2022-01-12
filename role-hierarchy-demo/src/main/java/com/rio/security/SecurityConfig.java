@@ -55,15 +55,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .exceptionHandling()
-                    .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
-//                .and()
-//                .authorizeRequests()
-//                    .expressionHandler(webExpressionHandler())
-//                    .antMatchers("/ping-admin").hasRole("ADMIN")
-//                    .antMatchers("/ping-employee").hasAnyRole("ADMIN", "EMPLOYEE")
-//                    .antMatchers("/ping-guest").hasAnyRole("ADMIN", "EMPLOYEE", "GUEST");
+                    .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                .and()
+                .authorizeRequests()
+                    .expressionHandler(webExpressionHandler())
+                    .antMatchers("/ping-admin").hasRole("ADMIN")
+                    .antMatchers("/ping-employee").hasAnyRole("ADMIN", "EMPLOYEE")
+                    .antMatchers("/ping-guest").hasAnyRole("ADMIN", "EMPLOYEE", "GUEST");
 
-        http.addFilterAfter(jwtTokenValidationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtTokenValidationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
