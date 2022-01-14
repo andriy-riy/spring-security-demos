@@ -11,6 +11,7 @@ public class PingController {
         return new PingDto("Bingo!");
     }
 
-    private record PingDto(String message) {
+    private record PingDto(
+            String message) {
     }
 }

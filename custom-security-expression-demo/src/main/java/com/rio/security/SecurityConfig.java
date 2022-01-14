@@ -30,7 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                           ObjectMapper objectMapper,
                           @Value("${security.authentication.jwt.secret}") String secret,
                           @Value("${security.authentication.jwt.expiration}") Duration tokenExpiration) {
-
         this.userService = userService;
         this.objectMapper = objectMapper;
         this.secret = secret;

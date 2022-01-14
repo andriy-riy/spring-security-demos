@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @RequiredArgsConstructor
+@RestController("/api/v1")
 public class OrganizationController {
 
     private final OrganizationService organizationService;
 
-    @GetMapping("/api/v1/organizations/{id}/events")
+    @GetMapping("/organizations/{id}/events")
     public List<OrganizationEvent> getOrganizationEvents(@PathVariable String id) {
         return organizationService.findById(id)
                 .map(Organization::events)

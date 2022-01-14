@@ -21,6 +21,7 @@ public class PingController {
         return new ResponseDto("Hello Guest!");
     }
 
-    private record ResponseDto(String message) {
+    private record ResponseDto(
+            String message) {
     }
 }

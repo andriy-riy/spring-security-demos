@@ -58,7 +58,7 @@ public class MongoDBAuthenticationProvider implements AuthenticationProvider {
                     .orElseThrow(() -> new BadCredentialsException("Credentials are invalid"));
         }
 
-        return null;
+        throw new BadCredentialsException("Credentials are invalid");
     }
 
     @Override
