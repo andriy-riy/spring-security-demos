@@ -1,5 +1,5 @@
-### Ping admin request
-GET http://localhost:8080/api/v1/organizations/{id}/events
+### Get organization events request
+GET http://localhost:8080/api/v1/organizations/2/events
 Authorization: Bearer
 
 ### Login
