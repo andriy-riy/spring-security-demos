@@ -30,7 +30,7 @@ public class JwtBearerTokenFilter extends GenericFilterBean {
         obtainBearerToken((HttpServletRequest) servletRequest)
                 .flatMap(token -> JwtUtil.parseToken(token, secret))
                 .ifPresent(userPrinciple -> SecurityContextHolder.getContext()
-                        .setAuthentication(new UsernamePasswordAuthenticationToken(userPrinciple, "", Collections.singletonList(new SimpleGrantedAuthority(userPrinciple.role().name())))));
+                        .setAuthentication(new UsernamePasswordAuthenticationToken(userPrinciple, "", Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + userPrinciple.role().name())))));
 
         filterChain.doFilter(servletRequest, servletResponse);
     }
