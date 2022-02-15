@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final List<User> users = List.of(
-            new User("1", "omelnyk@jappware.com", "omelnyk@omelnyk", List.of("1")),
-            new User("2", "ariy@jappware.com", "ariy@ariy", List.of("1")),
-            new User("3", "omilovskyi@jappware.com", "omilovskyi@omilovskyi", List.of("1")),
+            new User("1", "andriy@email.com", "andriy@andriy", List.of("1")),
+            new User("2", "ivan@email.com", "ivan@ivan", List.of("1")),
+            new User("3", "petro@email.com", "petro@petro", List.of("1")),
             new User("4", "якийсь_лєвий_чувак@email.com", "user@user", List.of("2"))
     );
 

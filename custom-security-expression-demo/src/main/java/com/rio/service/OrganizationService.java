@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 public class OrganizationService {
 
     private final List<Organization> organizations = List.of(
-            new Organization("1", "Jappware",
+            new Organization("1", "Наша організація",
                     List.of(
                             new OrganizationEvent("Strategic session", LocalDateTime.of(2021, 12, 11, 16, 0, 0), LocalDateTime.of(2021, 11, 16, 18, 0, 0)),
                             new OrganizationEvent("New Year party", LocalDateTime.of(2022, 12, 31, 21, 0, 0), LocalDateTime.of(2022, 1, 1, 8, 0, 0)),
-                            new OrganizationEvent("Jappware's Winter 2022 Party", LocalDateTime.of(2022, 1, 28, 18, 0, 0), LocalDateTime.of(2022, 1, 29, 2, 0, 0))
+                            new OrganizationEvent("Winter 2022 Party", LocalDateTime.of(2022, 1, 28, 18, 0, 0), LocalDateTime.of(2022, 1, 29, 2, 0, 0))
                     ),
                     List.of("1", "2", "3")),
 
