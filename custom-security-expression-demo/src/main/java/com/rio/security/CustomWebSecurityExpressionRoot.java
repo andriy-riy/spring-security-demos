@@ -10,7 +10,7 @@ public class CustomWebSecurityExpressionRoot extends WebSecurityExpressionRoot {
         super(authentication, fi);
     }
 
-    public boolean isMember(String organizationId) {
+    public boolean isOrganizationMember(String organizationId) {
         if (this.authentication.isAuthenticated()) {
             if (this.getPrincipal() instanceof UserPrinciple userPrinciple) {
                 return userPrinciple.organizationIds() != null && userPrinciple.organizationIds().contains(organizationId);

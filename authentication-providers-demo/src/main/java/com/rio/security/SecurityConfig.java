@@ -30,6 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .failureHandler(new AuthenticationEntryPointFailureHandler(new HttpStatusEntryPoint(HttpStatus.BAD_REQUEST)))
                 .and()
                 .logout()
+                    .deleteCookies("JSESSIONID")
+                    .invalidateHttpSession(true)
                     .logoutSuccessHandler((request, response, authentication) -> response.setStatus(HttpStatus.OK.value()))
                 .and()
                 .exceptionHandling()

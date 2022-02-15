@@ -4,6 +4,7 @@ import com.rio.entity.User;
 import com.rio.repository.UserRepository;
 
 import java.util.Collections;
+import java.util.Optional;
 import javax.annotation.PostConstruct;
 
 import lombok.RequiredArgsConstructor;
@@ -48,12 +49,12 @@ public class MongoDBAuthenticationProvider implements AuthenticationProvider {
             String password = credentials.toString();
 
             return userRepository.findByEmail(email)
-                    .map(user -> {
+                    .flatMap(user -> {
                         if (password.equals(user.getPassword())) {
-                            return new UsernamePasswordAuthenticationToken(email, password, Collections.emptyList());
+                            return Optional.of(new UsernamePasswordAuthenticationToken(email, password, Collections.emptyList()));
                         }
 
-                        throw new BadCredentialsException("Credentials are invalid");
+                        return Optional.empty();
                     })
                     .orElseThrow(() -> new BadCredentialsException("Credentials are invalid"));
         }

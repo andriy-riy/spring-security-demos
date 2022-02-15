@@ -49,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                     .expressionHandler(new CustomDefaultWebSecurityExpressionHandler())
-                    .antMatchers("/api/v1/organizations/{id}/**").access("isMember(#id)");
+                    .antMatchers("/api/v1/organizations/{id}/**").access("isOrganizationMember(#id)");
 
         http.addFilterBefore(jwtTokenValidationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

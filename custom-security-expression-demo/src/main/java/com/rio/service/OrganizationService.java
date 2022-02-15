@@ -21,7 +21,7 @@ public class OrganizationService {
                     ),
                     List.of("1", "2", "3")),
 
-            new Organization("2", "Якась організація",
+            new Organization("2", "Якась лєва організація",
                     List.of(
                             new OrganizationEvent("Якийсь івент", LocalDateTime.of(2021, 12, 31, 21, 0, 0), LocalDateTime.of(2021, 1, 1, 8, 0, 0))
                     ),
