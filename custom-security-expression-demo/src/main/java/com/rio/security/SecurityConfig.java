@@ -44,6 +44,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .formLogin()
+                    .successHandler(new JwtAuthenticationSuccessHandler(objectMapper, secret, tokenExpiration))
+                    .failureHandler(new AuthenticationEntryPointFailureHandler(new HttpStatusEntryPoint(HttpStatus.BAD_REQUEST)))
+                .and()
                 .exceptionHandling()
                     .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 .and()
@@ -57,16 +61,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(new MongoDBAuthenticationProvider(userService));
-    }
-
-    @Bean
-    public UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter() throws Exception {
-        var usernamePasswordAuthenticationFilter = new UsernamePasswordAuthenticationFilter();
-        usernamePasswordAuthenticationFilter.setAuthenticationManager(this.authenticationManager());
-        usernamePasswordAuthenticationFilter.setAuthenticationSuccessHandler(new JwtAuthenticationSuccessHandler(objectMapper, secret, tokenExpiration));
-        usernamePasswordAuthenticationFilter.setAuthenticationFailureHandler(new AuthenticationEntryPointFailureHandler(new HttpStatusEntryPoint(HttpStatus.BAD_REQUEST)));
-
-        return usernamePasswordAuthenticationFilter;
     }
 
     @Bean
